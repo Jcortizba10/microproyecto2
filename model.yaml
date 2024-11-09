@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-docker-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-docker-app
+  template:
+    metadata:
+      labels:
+        app: my-docker-app
+    spec:
+      containers:
+      - name: my-docker-container
+        image: jcortizba/modelo:latest  # Imagen de Docker Hub
+        ports:
+        - containerPort: 5000  # Cambia el puerto según tu aplicación
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-docker-app-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: my-docker-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
